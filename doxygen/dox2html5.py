@@ -4,6 +4,7 @@
 #   This file is part of m.css.
 #
 #   Copyright © 2017, 2018 Vladimír Vondruš <mosra@centrum.cz>
+#   Copyright © 2018 Dominik Madarász <zaklaus@outlook.com>
 #
 #   Permission is hereby granted, free of charge, to any person obtaining a
 #   copy of this software and associated documentation files (the "Software"),
@@ -404,7 +405,12 @@ def parse_ref(state: State, element: ET.Element) -> str:
     else:
         class_ = 'm-dox'
 
-    return '<a href="{}" class="{}">{}</a>'.format(url, class_, add_wbr(parse_inline_desc(state, element).strip()))
+    wbr = add_wbr(parse_inline_desc(state, element).strip())
+
+    if wbr == 'ZPL_<wbr />DEF':
+        return ''
+
+    return '<a href="{}" class="{}">{}</a>'.format(url, class_, wbr)
 
 def parse_id(element: ET.Element) -> Tuple[str, str, str]:
     # Returns URL base (usually saved to state.current_definition_url_base and
@@ -1599,6 +1605,9 @@ def parse_func(state: State, element: ET.Element):
     # Friend functions have friend as type. That's just awful. COME ON.
     if func.type.startswith('friend '):
         func.type = func.type[7:]
+
+    if func.type.startswith('ZPL_DEF '):
+        func.type = func.type[8:]
 
     # Extract function signature to prefix, suffix and various flags. Important
     # things affecting caller such as static or const (and rvalue overloads)
