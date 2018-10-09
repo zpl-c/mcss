@@ -1579,7 +1579,7 @@ def parse_typedef(state: State, element: ET.Element):
     typedef.has_template_details, typedef.templates = parse_template_params(state, element.find('templateparamlist'), templates)
 
     typedef.has_details = typedef.base_url == state.current_compound_url and (typedef.description or typedef.has_template_details)
-    if typedef.brief or typedef.has_details:
+    if True:
         # Avoid duplicates in search
         if typedef.base_url == state.current_compound_url and not state.doxyfile['M_SEARCH_DISABLED']:
             result = Empty()
