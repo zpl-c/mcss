@@ -1729,7 +1729,7 @@ def parse_var(state: State, element: ET.Element):
     var.description, search_keywords, var.is_deprecated = parse_var_desc(state, element)
 
     var.has_details = var.base_url == state.current_compound_url and var.description
-    if var.brief or var.has_details:
+    if True:
         # Avoid duplicates in search
         if var.base_url == state.current_compound_url and not state.doxyfile['M_SEARCH_DISABLED']:
             result = Empty()
@@ -2398,7 +2398,8 @@ def parse_xml(state: State, xml: str):
                     var = parse_var(state, memberdef)
                     if var:
                         compound.public_vars += [var]
-                        if var.has_details: compound.has_var_details = True
+                    
+                compound.has_var_details = True
 
             elif compounddef_child.attrib['kind'] == 'protected-type':
                 for memberdef in compounddef_child:
